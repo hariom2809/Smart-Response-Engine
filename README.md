@@ -20,35 +20,6 @@ Rag chatbot: It is a Ai powered chatbot which answers the user query only on hte
 - *Language* :  **Python**
 - *Framework/Library* :  **FastAPI**
 
-## Project Structure:
-
-```text
-Rag-Chatbot-Backend
-|
-|-- .venv/
-|-- app/
-|   |
-|   |-- config.py
-|   |-- ingest.py
-|   |-- main.py
-|   |-- rag.py
-|
-|-- data/
-|   |
-|   |-- document.pdf
-|
-|-- vectorstore/
-|   |
-|   |
-|   |-- index.faiss
-|   |-- index.pkl
-|   
-|-- .env
-|-- .gitignore
-|-- README.ms
-|-- requirements.txt
-```
-
 ## High Level Design
 
 ```mermaid
@@ -100,9 +71,68 @@ flowchart LR
     USER -. New Query .-> QUERY
 ```
 
-## Knowledge Base:
+## Knowledge Base Structure
 
-![Knowledge Base](diagram/knowledge_base.pmg)
+The system stores information in a FAISS vector store. Documents are split into chunks, converted into embeddings, and indexed for retrieval.
+
+```mermaid
+flowchart LR
+
+    DOC[Source Documents]
+
+    CHUNK1[Chunk 1]
+    CHUNK2[Chunk 2]
+    CHUNK3[Chunk N]
+
+    EMB1[Embedding Vector 1]
+    EMB2[Embedding Vector 2]
+    EMB3[Embedding Vector N]
+
+    FAISS[(FAISS Index)]
+
+    DOC --> CHUNK1
+    DOC --> CHUNK2
+    DOC --> CHUNK3
+
+    CHUNK1 --> EMB1
+    CHUNK2 --> EMB2
+    CHUNK3 --> EMB3
+
+    EMB1 --> FAISS
+    EMB2 --> FAISS
+    EMB3 --> FAISS
+```
+
+**Note:** The FAISS index is the single source of truth for retrieval. If relevant context is not found in the vector store, the system returns an apology response instead of generating an answer.
+
+## Project Structure:
+
+```text
+Rag-Chatbot-Backend
+|
+|-- .venv/
+|-- app/
+|   |
+|   |-- config.py
+|   |-- ingest.py
+|   |-- main.py
+|   |-- rag.py
+|
+|-- data/
+|   |
+|   |-- document.pdf
+|
+|-- vectorstore/
+|   |
+|   |
+|   |-- index.faiss
+|   |-- index.pkl
+|   
+|-- .env
+|-- .gitignore
+|-- README.ms
+|-- requirements.txt
+```
 
 ## Installation:
 
